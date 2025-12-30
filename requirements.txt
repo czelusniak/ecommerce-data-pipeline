@@ -1,2 +1,6 @@
-dbt
 dbt-snowflake
+requests
+pandas
+apache-airflow-providers-snowflake
+snowflake-connector-python[pandas]
+snowflake-sqlalchemy
