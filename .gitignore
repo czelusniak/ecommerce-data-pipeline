@@ -168,3 +168,4 @@ airflow/logs/
 target/
 dbt_packages/
 logs/
+tests/playground.py
