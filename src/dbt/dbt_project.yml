@@ -6,19 +6,19 @@ profile: 'default'
 models:
   snowflake_airflow_dbt:
     # Staging layer - basic transformations of seeds/sources
-    1staging:
+    staging:
       +schema: staging
       +materialized: view
       +enabled: true
 
     # Intermediate layer - combinations of models
-    2intermediate:
+    intermediate:
       +schema: intermediate
       +materialized: view
       +enabled: true
 
     # Marts layer - final analysis models
-    3marts:
+    marts:
       +schema: marts
       +materialized: table
       +enabled: true

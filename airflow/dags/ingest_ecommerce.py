@@ -12,51 +12,48 @@ default_args = {
     'retries': 0,
 }
 
-def ingest_products_logic():
-    # ----- 1. Extraction
+def ingest_data(endpoint, table_name):
+    # ----- 1. EXTRACTION
     print("Fetching data from FakeStore API...")
-    url = "https://fakestoreapi.com/products"
+    url = f"https://fakestoreapi.com/{endpoint}"
     response = requests.get(url)
     response.raise_for_status()
     data = response.json()
 
-    # ----- 2. Transformation
+
+    # ----- 2. TRANSFORMATION
     # Converting the list of dictionaries into a table (DataFrame)
-    print(f"2. Transforming {len(data)} products...")
+    print(f"2. Transforming {len(data)} rows for {table_name}...")
     df = pd.DataFrame(data)
 
     # Add metadata timestamp
     df['extracted_at'] = datetime.now()
-
-    # Flatten the 'rating' column
-    if 'rating' in df.columns:
-        df_rating = pd.json_normalize(df['rating'])
-        # Drop original rating and join the flattened columns
-        df = pd.concat([df.drop(columns=['rating']), df_rating], axis=1)
-
-    # Renaming to use Snake_Case
-    df = df.rename(columns={
-        "id": "product_id",
-        "rate": "rating_value",
-        "count": "rating_count"
-    })
 
     df.columns = [
         col.strip().lower().replace(" ", "_").replace(".","_")
         for col in df.columns
     ]
 
-    # ----- 3. Loading (Secure Connection via Airflow Hook)
-    print("3. Connecting to Snowflake via Hook...")
+    # Carts have lists inside columns (e.g., [{'productId':1...}]).
+    # Pandas to_sql hates lists. We must convert them to strings first.
+    for col in df.columns:
+        # Check if the column contain lists or dicts
+        if df[col].apply(lambda x: isinstance(x, (list, dict))).any():
+            print(f"   -> Flattening complex column: {col}")
+            df[col] = df[col].astype(str)
+
+
+    # ----- 3. LOADING (Secure Connection via Airflow Hook)
+    print(f"3. Connecting to Snowflake to write to RAW_DATA.{table_name}...")
 
     # Airflow retrieves the secure password from its vault
     hook = SnowflakeHook(snowflake_conn_id='snowflake_default')
     engine = hook.get_sqlalchemy_engine()
 
-    print("4. Inserting data into table RAW_DATA.PRODUCTS...")
+    print(f"4. Inserting data into table RAW_DATA.{table_name}...")
     with engine.connect() as connection:
         df.to_sql(
-            name='products',       # Table's name
+            name=table_name.lower(),       # Table's name
             con=engine,
             schema='RAW_DATA',     
             if_exists='replace',   # Full Refresh for now
@@ -67,14 +64,29 @@ def ingest_products_logic():
     print("Success! Load complete.")
 
 with DAG(
-    '01_ingest_products',
+    '01_ingest_ecommerce',
     default_args=default_args,
     schedule_interval='@daily',
     catchup=False,
     tags=['ecommerce', 'ingestion']
 ) as dag:
 
-    t1 = PythonOperator(
-        task_id='ingest_api_products',
-        python_callable=ingest_products_logic
+    # Task 1: Ingest Products
+    t_products = PythonOperator(
+        task_id='ingest_products',
+        python_callable=ingest_data,  # Call the generic function
+        op_kwargs={
+            'endpoint': 'products', 
+            'table_name': 'PRODUCTS' # Passing Uppercase directly is safer
+        }
+    )
+
+    # Task 2: Ingest Carts 
+    t_carts = PythonOperator(
+        task_id='ingest_carts',
+        python_callable=ingest_data,
+        op_kwargs={
+            'endpoint': 'carts', 
+            'table_name': 'CARTS'
+        }
     )
