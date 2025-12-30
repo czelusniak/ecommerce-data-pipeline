@@ -2,6 +2,7 @@ version: 2
 
 sources:
   - name: ecommerce_source
+    description: "Raw data ingested by Airflow FakeStore API"
     database: ECOMMERCE_DB
     schema: RAW_DATA
     tables:

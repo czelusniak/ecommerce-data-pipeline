@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: int_order_items
+    description: "Intermediate table joining carts and products. One row per item sold."
+    columns:
+      - name: cart_id
+        description: "Primary key of the cart"
+        tests:
+          - not_null
+      
+      - name: product_id
+        description: "Foreign key to the product"
+        tests:
+          - not_null
+
+      - name: total_item_amount
+        description: "Calculated value (quantity * price) for this specific item"
+        tests:
+          - not_null
