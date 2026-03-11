@@ -21,7 +21,7 @@ This project was initially based on the YouTube tutorial [here](https://www.yout
 
 - Docker and Docker Compose
 - Python >= 3
-- Snowflake account (https://www.snowflake.com/)
+- Snowflake account (https://signup.snowflake.com/)
 
 ## Installation
 
