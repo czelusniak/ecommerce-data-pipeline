@@ -114,6 +114,43 @@ Expected result:
 > **Note:** This is a local test. Later, we will use the Docker container for ingestion instead of running locally.
 
 
+
+**12. Create a new database and schema**
+-- Cria o banco de dados que o dbt e o Airflow esperam
+CREATE DATABASE IF NOT EXISTS ECOMMERCE_DB;
+-- Cria o schema para receber os dados crus da API
+CREATE SCHEMA IF NOT EXISTS ECOMMERCE_DB.RAW_DATA;
+
+
+
+**13. Airflow Configuration: Snowflake Connection**
+
+1. **Access the Interface**
+    * Open your browser and go to your Airflow UI (e.g., `http://localhost:8080`).
+
+2. **Navigate to Connections**
+    * In the top menu, click on **Admin** and then select **Connections**.
+
+3. **Locate the Connection**
+    * Search the list for a connection named `snowflake_default`.
+    * **If it exists:** Click the pencil icon (**Edit**) next to it.
+    * **If it does not exist:** Click the blue **+** button to create a new one.
+
+4. **Enter Connection Details**
+    * **Connection Id:** `snowflake_default`
+    * **Connection Type:** `Snowflake`
+    * **Account:** Your new Account Name (e.g., `xy12345-ab98765`).
+    * **Login:** Your Snowflake username.
+    * **Password:** Your Snowflake password.
+    * **Database:** `ECOMMERCE_DB` (the database that was created previously).
+
+5. **Test and Save**
+    * Scroll to the bottom of the page and click the **Test** button.
+    * If a green bar appears saying **"Connection successful"**, click **Save**.
+
+
+
+
 **12. Create Docker image for dbt:**
    - Create the dbt Docker image:
    ```bash
