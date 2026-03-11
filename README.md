@@ -25,13 +25,15 @@ This project was initially based on the YouTube tutorial [here](https://www.yout
 
 ## Installation
 
-**1. Clone the repository:**
+**1. Run the WSL in your PowerShell**
+
+**2. Clone the repository in the Ubuntu folder:**
 ```bash
 git clone https://github.com/czelusniak/ecommerce-data-pipeline.git
 cd dbt-snowflake-airflow
 ```
 
-**2. Install Docker:**
+**3. Install Docker:**
    - Follow the official Docker installation guide for your operating system:
      - [Docker Desktop for Windows](https://docs.docker.com/desktop/install/windows-install/)
      - [Docker Desktop for Mac](https://docs.docker.com/desktop/install/mac-install/)
@@ -42,14 +44,17 @@ cd dbt-snowflake-airflow
      docker compose version
      ```
 
-**3. Create and activate virtual environment:**
+**4. Run Snowflake setup SQL commands:**
+   - Open a Snowflake worksheet and execute the SQL commands from `scripts/snowflake-setup.sql` in your Snowflake account
+   - This will create the necessary warehouse, database, schema, role, and user for dbt
+
+**5. On WSL, create and activate a virtual environment:**
 ```bash
 python3 -m venv venv
-source venv/bin/activate  # Linux or
-venv/Scripts/Activate  # Windows
+source venv/bin/activate
 ```
 
-**4. Install requirements:**
+**6. Install requirements:**
 ```bash
 pip install -r requirements.txt
 ```
@@ -61,25 +66,7 @@ pip install -r requirements.txt
 dbt --version
 ```
 
-**6. Configure Snowflake connection:**
-   - Rename `src/dbt/example-profiles.yml` to `profiles.yml`
-   - Edit `src/dbt/profiles.yml` and replace `your-account-here` with your Snowflake account name
-
-**7. Run Snowflake setup SQL commands:**
-   - Open a Snowflake worksheet and execute the SQL commands from `scripts/snowflake-setup.sql` in your Snowflake account
-   - This will create the necessary warehouse, database, schema, role, and user for dbt
-
-
-**8. Test dbt connection with Snowflake:**
-```bash
-cd src/dbt && dbt debug
-```
-Expected result:
-
-![Connection OK](assets/connection-dbt-snow-ok.png)
-
-
-**9. Start and access Airflow:**
+**7. Start and access Airflow:**
 ```bash
 cd airflow
 docker compose up -d
@@ -87,14 +74,25 @@ docker compose up -d
 
 Expected result:
 
-![Airflow OK](assets/ariflow-ok.png)
-
+<img width="348" height="178" alt="image" src="https://github.com/user-attachments/assets/7b630669-fb42-43e7-81cc-61b54e34ef53" />
 
 - Access the Airflow using the URL: http://localhost:8081
 - Username: `airflow`
 - Password: `airflow`
 
 
+**8. Configure Snowflake connection:**
+   - Rename `src/dbt/example-profiles.yml` to `profiles.yml`
+   - Edit `src/dbt/profiles.yml` and replace `your-account-here` with your Snowflake account name
+
+
+**9. Test dbt connection with Snowflake:**
+```bash
+cd src/dbt && dbt debug
+```
+Expected result:
+
+![Connection OK](assets/connection-dbt-snow-ok.png)
 
 
 **10. Ingest data (local test, before using Docker):**
