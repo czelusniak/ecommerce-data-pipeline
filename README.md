@@ -92,7 +92,8 @@ cd src/dbt && dbt debug
 ```
 Expected result:
 
-![Connection OK](assets/connection-dbt-snow-ok.png)
+<img width="479" height="194" alt="image" src="https://github.com/user-attachments/assets/eb74677a-ff65-4d1e-855d-d382609468c2" />
+
 
 
 **11. Ingest data (local test, before using Docker):**
