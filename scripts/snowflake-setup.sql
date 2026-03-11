@@ -58,3 +58,24 @@ GRANT SELECT ON FUTURE VIEWS IN DATABASE DBT_DEV_DB TO DBT_ROLE;
 
 
 GRANT IMPORTED PRIVILEGES ON DATABASE SNOWFLAKE TO ROLE DBT_ROLE;
+
+
+---
+-- My modifications
+
+-- Cria o banco de dados que o dbt e o Airflow esperam
+CREATE DATABASE IF NOT EXISTS ECOMMERCE_DB;
+
+-- Cria o schema para receber os dados crus da API
+CREATE SCHEMA IF NOT EXISTS ECOMMERCE_DB.RAW_DATA;
+
+USE ROLE ACCOUNTADMIN;
+
+-- 1. Permite que a role do dbt enxergue o banco ECOMMERCE_DB
+GRANT USAGE ON DATABASE ECOMMERCE_DB TO ROLE DBT_ROLE;
+
+-- 2. Permite que a role do dbt enxergue o schema RAW_DATA
+GRANT USAGE ON SCHEMA ECOMMERCE_DB.RAW_DATA TO ROLE DBT_ROLE;
+
+-- 3. Permite que a role do dbt LEIA (Select) as tabelas lá dentro
+GRANT SELECT ON ALL TABLES IN SCHEMA ECOMMERCE_DB.RAW_DATA TO ROLE DBT_ROLE;
