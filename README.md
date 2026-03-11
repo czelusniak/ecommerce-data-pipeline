@@ -27,11 +27,13 @@ This project was initially based on the YouTube tutorial [here](https://www.yout
 
 **1. Run the WSL in your PowerShell**
 
+
 **2. Clone the repository in the Ubuntu folder:**
 ```bash
 git clone https://github.com/czelusniak/ecommerce-data-pipeline.git
 cd dbt-snowflake-airflow
 ```
+
 
 **3. Install Docker:**
    - Follow the official Docker installation guide for your operating system:
@@ -44,15 +46,18 @@ cd dbt-snowflake-airflow
      docker compose version
      ```
 
+
 **4. Run Snowflake setup SQL commands:**
    - Open a Snowflake worksheet and execute the SQL commands from `scripts/snowflake-setup.sql` in your Snowflake account
    - This will create the necessary warehouse, database, schema, role, and user for dbt
+
 
 **5. On WSL, create and activate a virtual environment:**
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 ```
+
 
 **6. Install requirements:**
 ```bash
@@ -65,6 +70,7 @@ pip install -r requirements.txt
 ```bash
 dbt --version
 ```
+
 
 **8. Start and access Airflow:**
 ```bash
@@ -95,7 +101,6 @@ Expected result:
 <img width="479" height="194" alt="image" src="https://github.com/user-attachments/assets/eb74677a-ff65-4d1e-855d-d382609468c2" />
 
 
-
 **11. Ingest data (local test, before using Docker):**
 ```bash
 cd src/dbt && dbt seed
@@ -104,9 +109,10 @@ This will load the CSV files from the `seeds/` directory into Snowflake.
 
 Expected result:
 
-![dbt seed success](assets/dbt-seed.png)
+<img width="839" height="314" alt="image" src="https://github.com/user-attachments/assets/3193b302-0ecc-4fba-8493-938a942e467a" />
 
 > **Note:** This is a local test. Later, we will use the Docker container for ingestion instead of running locally.
+
 
 **12. Create Docker image for dbt:**
    - Create the dbt Docker image:
@@ -135,6 +141,7 @@ Expected result:
 You can see the DAG (Directed Acyclic Graph) in the Airflow UI:
 
 ![Airflow DAG](assets/dag-sample.png)
+
 
 
 ## Stopping the Project
