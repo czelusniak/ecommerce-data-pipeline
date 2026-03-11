@@ -61,12 +61,12 @@ pip install -r requirements.txt
 > **Note:** Make sure your virtual environment is activated for the following steps.
 
 
-**5. Verify dbt installation:**
+**7. Verify dbt installation:**
 ```bash
 dbt --version
 ```
 
-**7. Start and access Airflow:**
+**8. Start and access Airflow:**
 ```bash
 cd airflow
 docker compose up -d
@@ -81,12 +81,12 @@ Expected result:
 - Password: `airflow`
 
 
-**8. Configure Snowflake connection:**
+**9. Configure Snowflake connection:**
    - Rename `src/dbt/example-profiles.yml` to `profiles.yml`
    - Edit `src/dbt/profiles.yml` and replace `your-account-here` with your Snowflake account name
 
 
-**9. Test dbt connection with Snowflake:**
+**10. Test dbt connection with Snowflake:**
 ```bash
 cd src/dbt && dbt debug
 ```
@@ -95,7 +95,7 @@ Expected result:
 ![Connection OK](assets/connection-dbt-snow-ok.png)
 
 
-**10. Ingest data (local test, before using Docker):**
+**11. Ingest data (local test, before using Docker):**
 ```bash
 cd src/dbt && dbt seed
 ```
@@ -107,7 +107,7 @@ Expected result:
 
 > **Note:** This is a local test. Later, we will use the Docker container for ingestion instead of running locally.
 
-**11. Create Docker image for dbt:**
+**12. Create Docker image for dbt:**
    - Create the dbt Docker image:
    ```bash
    cd src
@@ -120,7 +120,7 @@ Expected result:
    > **Note:** This Docker image will be used by Airflow to run dbt transformations.
 
 
-**12. Test the container:**
+**13. Test the container:**
    - Modify the data in the `seeds/` directory
    - Run the seed command again:
    ```bash
@@ -129,7 +129,7 @@ Expected result:
    - Verify the updates in your Snowflake account
 
 
-**13. View orchestration in Airflow:**
+**14. View orchestration in Airflow:**
 
 You can see the DAG (Directed Acyclic Graph) in the Airflow UI:
 
