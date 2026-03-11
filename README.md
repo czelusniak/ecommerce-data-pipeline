@@ -27,7 +27,7 @@ This project was initially based on the YouTube tutorial [here](https://www.yout
 
 **1. Clone the repository:**
 ```bash
-git clone https://github.com/czelusniak/airflow-dbt-snowflake
+git clone https://github.com/czelusniak/ecommerce-data-pipeline.git
 cd dbt-snowflake-airflow
 ```
 
